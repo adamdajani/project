@@ -1,0 +1,280 @@
+# Hello! This is an API that calls upon Reddit's DBZ Dokkan Battle subreddit to give you the latest Global and JP official updates on the game
+
+import praw # praw is a package that allows you to access Reddit's API
+
+reddit = praw.Reddit(client_id='',       # client id and secret are necessary
+                     client_secret= '',  # unique keys to be able to access the API. You can get them from Reddit's website.
+                     user_agent='my user agent')
+
+DokkanSub = reddit.subreddit('DBZDokkanBattle') # set the value 'DokkanSub' as a shortcut to access the subreddit
+
+# getFilters() is a function that figures out which filters you would like to place on your search
+
+def getFilters():
+    print('Welcome to the Reddit Dokkan News Giver! Would you like Global news, JP news, or both?')
+    newsChoice = input().lower() #returns input in lower case into the newsChoice variable
+    if newsChoice.startswith(('g','j','b')) is False: # to make sure that the user chooses either global, jp, or both
+        print('Please enter either (g)lobal, (j)p, or (b)oth.')
+        input()
+
+    print('Okay, got it. Would you like to search from hot, new, top, or controversial?') # figures out which sorting list of posts you would like to search from Reddit
+    filterChoice = input().lower()
+    if filterChoice.startswith('h') is False and filterChoice.startswith('n') is False and filterChoice.startswith('t') is False and filterChoice.startswith('c') is False:
+        print('Please enter either (h)ot, (n)ew, (t)op, or (c)ontroversial.')
+        input()
+
+    elif filterChoice.startswith('h'):
+        filterChoice = 'hot'
+
+    elif filterChoice.startswith('n'):
+        filterChoice = 'new'
+
+    elif filterChoice.startswith('t'):
+        filterChoice = 'top'
+
+    elif filterChoice.startswith('c'):
+        filterChoice = 'controversial'
+
+
+    print('Thanks, last question: How many posts would you like me to search through?') # Figures out how many posts you would like to comb through
+    numberSymbols = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100, 101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197.198,199,200]
+    limitNumber = input()
+    limitNumber = int(limitNumber)
+    if limitNumber not in numberSymbols:
+        print('Please enter a number.')
+        input()
+
+    if newsChoice.startswith('g') and filterChoice.startswith('h'): # will search for posts sorted by 'hot' that have the 'GLB Official' flair in the Dokkan Battle subreddit
+
+        for submission in DokkanSub.hot(limit=limitNumber):
+            if submission.link_flair_text == "GLB Official":
+                print(submission.title)
+                print(submission.url)
+
+                from PIL import Image  # this block and the next one allow me to print the image from the url and download it to your computer
+                import requests
+                from io import BytesIO
+
+                url = submission.url
+                response = requests.get(url)
+                img = Image.open(BytesIO(response.content))
+                img.show() # this is the function that shows the image
+
+                print('____________________________')
+
+    elif newsChoice.startswith('g') and filterChoice.startswith('n'): # will search for posts sorted by 'new' that have the 'GLB Official' flair in the Dokkan Battle subrredit
+
+        for submission in DokkanSub.new(limit=limitNumber):
+            if submission.link_flair_text == "GLB Official":
+                print(submission.title)
+                print(submission.url)
+
+                from PIL import Image
+                import requests
+                from io import BytesIO
+
+                url = submission.url
+                response = requests.get(url)
+                img = Image.open(BytesIO(response.content))
+                img.show()
+
+                print('____________________________')
+
+    elif newsChoice.startswith('g') and filterChoice.startswith('t'): # will search for posts sorted by 'top' that have the 'GLB Official' flair in the Dokkan Battle subrredit
+
+        for submission in DokkanSub.top(limit=limitNumber):
+            if submission.link_flair_text == "GLB Official":
+                print(submission.title)
+                print(submission.url)
+
+                from PIL import Image
+                import requests
+                from io import BytesIO
+
+                url = submission.url
+                response = requests.get(url)
+                img = Image.open(BytesIO(response.content))
+                img.show()
+
+                print('____________________________')
+
+    elif newsChoice.startswith('g') and filterChoice.startswith('c'): # will search for posts sorted by 'controversial' that have the 'GLB Official' flair in the Dokkan Battle subrredit
+
+        for submission in DokkanSub.controversial(limit=limitNumber):
+            if submission.link_flair_text == "GLB Official":
+                print(submission.title)
+                print(submission.url)
+
+                from PIL import Image
+                import requests
+                from io import BytesIO
+
+                url = submission.url
+                response = requests.get(url)
+                img = Image.open(BytesIO(response.content))
+                img.show()
+
+                print('____________________________')
+
+    elif newsChoice.startswith('j') and filterChoice.startswith('h'):# will search for posts sorted by 'hot' that have the 'JPN Official' flair in the Dokkan Battle subrredit
+
+        for submission in DokkanSub.hot(limit=limitNumber):
+            if submission.link_flair_text == "JPN Official":
+                print(submission.title)
+                print(submission.url)
+
+                from PIL import Image
+                import requests
+                from io import BytesIO
+
+                url = submission.url
+                response = requests.get(url)
+                img = Image.open(BytesIO(response.content))
+                img.show()
+
+                print('____________________________')
+
+    elif newsChoice.startswith('j') and filterChoice.startswith('n'):# will search for posts sorted by 'new' that have the 'JPN Official' flair in the Dokkan Battle subrredit
+
+        for submission in DokkanSub.new(limit=limitNumber):
+            if submission.link_flair_text == "JPN Official":
+                print(submission.title)
+                print(submission.url)
+
+                from PIL import Image
+                import requests
+                from io import BytesIO
+
+                url = submission.url
+                response = requests.get(url)
+                img = Image.open(BytesIO(response.content))
+                img.show()
+
+                print('____________________________')
+
+    elif newsChoice.startswith('j') and filterChoice.startswith('t'):# will search for posts sorted by 'top' that have the 'JPN Official' flair in the Dokkan Battle subrredit
+
+        for submission in DokkanSub.top(limit=limitNumber):
+            if submission.link_flair_text == "JPN Official":
+                print(submission.title)
+                print(submission.url)
+
+                from PIL import Image
+                import requests
+                from io import BytesIO
+
+                url = submission.url
+                response = requests.get(url)
+                img = Image.open(BytesIO(response.content))
+                img.show()
+
+                print('____________________________')
+
+    elif newsChoice.startswith('j') and filterChoice.startswith('c'):# will search for posts sorted by 'controversial' that have the 'JPN Official' flair in the Dokkan Battle subrredit
+
+        for submission in DokkanSub.controversial(limit=limitNumber):
+            if submission.link_flair_text == "JPN Official":
+                print(submission.title)
+                print(submission.url)
+
+                from PIL import Image
+                import requests
+                from io import BytesIO
+
+                url = submission.url
+                response = requests.get(url)
+                img = Image.open(BytesIO(response.content))
+                img.show()
+
+                print('____________________________')
+
+    elif newsChoice.startswith('b') and filterChoice.startswith('h'):# will search for posts sorted by 'hot' that have the 'JPN Official' or 'GLB Official' flair in the Dokkan Battle subrredit
+
+        for submission in DokkanSub.hot(limit=limitNumber):
+            if submission.link_flair_text == "JPN Official" or "GLB Official":
+                print(submission.title)
+                print(submission.url)
+
+                from PIL import Image
+                import requests
+                from io import BytesIO
+
+                url = submission.url
+                response = requests.get(url)
+                img = Image.open(BytesIO(response.content))
+                img.show()
+
+                print('____________________________')
+
+    elif newsChoice.startswith('b') and filterChoice.startswith('n'):# will search for posts sorted by 'new' that have the 'JPN Official' or 'GLB Official' flair in the Dokkan Battle subrredit
+
+        for submission in DokkanSub.new(limit=limitNumber):
+            if submission.link_flair_text == "JPN Official" or "GLB Official":
+                print(submission.title)
+                print(submission.url)
+
+                from PIL import Image
+                import requests
+                from io import BytesIO
+
+                url = submission.url
+                response = requests.get(url)
+                img = Image.open(BytesIO(response.content))
+                img.show()
+
+                print('____________________________')
+
+    elif newsChoice.startswith('b') and filterChoice.startswith('t'):# will search for posts sorted by 'top' that have the 'JPN Official' or 'GLB Official' flair in the Dokkan Battle subrredit
+
+        for submission in DokkanSub.top(limit=limitNumber):
+            if submission.link_flair_text == "JPN Official" or "GLB Official":
+                print(submission.title)
+                print(submission.url)
+
+                from PIL import Image
+                import requests
+                from io import BytesIO
+
+                url = submission.url
+                response = requests.get(url)
+                img = Image.open(BytesIO(response.content))
+                img.show()
+
+                print('____________________________')
+
+    elif newsChoice.startswith('b') and filterChoice.startswith('c'):# will search for posts sorted by 'controversial' that have the 'JPN Official' or 'GLB Official' flair in the Dokkan Battle subrredit
+
+        for submission in DokkanSub.controversial(limit=limitNumber):
+            if submission.link_flair_text == "JPN Official" or submission.link_flair_text == "GLB Official":
+                print(submission.title)
+                print(submission.url)
+
+                from PIL import Image
+                import requests
+                from io import BytesIO
+
+                url = submission.url
+                response = requests.get(url)
+                img = Image.open(BytesIO(response.content))
+                img.show()
+
+                print('____________________________')
+
+
+getFilters() # actually runs the getFilters function
+needsMoreNews = False
+
+def getMoreNews(): # this function allows you to do a different search from the beginning. All you have to do is type the letter y, or yes if you prefer
+    print('That\'s all I found, would you like to do another search?')
+    startOver = input()
+
+    if startOver.startswith('y'):
+        print('Okay let\'s find more news!')
+        needsMoreNews = True
+
+        while needsMoreNews == True:
+            getFilters()
+            getMoreNews()
+
+
+getMoreNews() # runs the getMoreNews function
